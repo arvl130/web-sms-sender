@@ -1,0 +1,22 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model ApiKey {
+  key          String    @id
+  messagesLeft Int
+  messages     Message[]
+}
+
+model Message {
+  id        String @id @default(uuid())
+  to        String @db.VarChar(15)
+  body      String @db.VarChar(160)
+  apiKeyKey String
+  apiKey    ApiKey @relation(fields: [apiKeyKey], references: [key])
+}
