@@ -35,3 +35,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# API routes for testing
+src/pages/api/test*
+src/pages/api/reset*
+src/pages/api/seed*
