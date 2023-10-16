@@ -13,6 +13,7 @@ const EnvironmentSchema = z.object({
   AWS_ACCESS_KEY_ID: z.string(),
   AWS_ACCESS_KEY_SECRET: z.string(),
   AWS_REGION: z.string(),
+  IS_MAINTENANCE: z.literal("1").optional(),
 })
 
 export default async function handler(
@@ -30,12 +31,17 @@ export default async function handler(
   >
 ) {
   try {
-    const { AWS_ACCESS_KEY_ID, AWS_ACCESS_KEY_SECRET, AWS_REGION } =
-      EnvironmentSchema.parse({
-        AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
-        AWS_ACCESS_KEY_SECRET: process.env.AWS_ACCESS_KEY_SECRET,
-        AWS_REGION: process.env.AWS_REGION,
-      })
+    const {
+      AWS_ACCESS_KEY_ID,
+      AWS_ACCESS_KEY_SECRET,
+      AWS_REGION,
+      IS_MAINTENANCE,
+    } = EnvironmentSchema.parse({
+      AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+      AWS_ACCESS_KEY_SECRET: process.env.AWS_ACCESS_KEY_SECRET,
+      AWS_REGION: process.env.AWS_REGION,
+      IS_MAINTENANCE: process.env.IS_MAINTENANCE,
+    })
 
     const {
       to,
@@ -87,12 +93,13 @@ export default async function handler(
       },
     })
 
-    await snsClient.send(
-      new PublishCommand({
-        Message: body,
-        PhoneNumber: to,
-      })
-    )
+    if (IS_MAINTENANCE === undefined)
+      await snsClient.send(
+        new PublishCommand({
+          Message: body,
+          PhoneNumber: to,
+        })
+      )
 
     res.json({ message: "Message sent", to, body })
   } catch (e) {
