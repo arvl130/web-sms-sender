@@ -46,6 +46,8 @@ export default async function handler(
       AWS_ACCESS_KEY_SECRET: process.env.AWS_ACCESS_KEY_SECRET,
       AWS_REGION: process.env.AWS_REGION,
       IS_MAINTENANCE: process.env.IS_MAINTENANCE,
+      SEMAPHORE_API_URL: process.env.SEMAPHORE_API_URL,
+      SEMAPHORE_API_KEY: process.env.SEMAPHORE_API_KEY,
     })
 
     const {
