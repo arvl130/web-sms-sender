@@ -113,7 +113,10 @@ export default async function handler(
         const response = await fetch(
           `${SEMAPHORE_API_URL}/messages?apikey=${SEMAPHORE_API_KEY}&number=${encodeURIComponent(
             to
-          )}&message=${encodeURIComponent(body)}`
+          )}&message=${encodeURIComponent(body)}`,
+          {
+            method: "POST",
+          }
         )
 
         const json = await response.json()
