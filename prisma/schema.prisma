@@ -7,6 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id       String    @id
+  email    String    @unique
+  sessions Session[]
+}
+
+model Session {
+  id        String   @id
+  userId    String
+  expiresAt DateTime
+
+  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
 model ApiKey {
   key          String    @id
   messagesLeft Int
