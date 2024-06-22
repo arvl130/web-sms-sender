@@ -41,7 +41,7 @@ export default function Layout({
       </header>
       <div className="flex flex-col flex-grow">{children}</div>
       <footer className="bg-zinc-800 flex justify-center">
-        <p className="text-white text-sm px-4 py-4">
+        <p className="text-white text-sm px-4 py-4 font-medium">
           Angelo Geulin &copy; 2024
         </p>
       </footer>
