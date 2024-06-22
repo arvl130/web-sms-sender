@@ -1,5 +1,9 @@
 import { buttonVariants } from "@/components/shadcn/ui/button"
-import { cn } from "@/utils/shadcn"
+import { Suspense } from "react"
+import {
+  SignInOrDashboardLink,
+  SkeletonSignInOrDashboardLink,
+} from "./sign-in-or-dashboard-button"
 import Link from "next/link"
 
 export default function Layout({
@@ -16,17 +20,9 @@ export default function Layout({
           </Link>
 
           <div>
-            <Link
-              href="/sign-in"
-              className={cn(
-                buttonVariants({
-                  variant: "default",
-                }),
-                "mr-3"
-              )}
-            >
-              Sign in
-            </Link>
+            <Suspense fallback={<SkeletonSignInOrDashboardLink />}>
+              <SignInOrDashboardLink />
+            </Suspense>
 
             <a
               href="https://www.ageulin.com/#contact"

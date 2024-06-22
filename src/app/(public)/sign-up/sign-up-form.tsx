@@ -10,9 +10,13 @@ import {
   FormMessage,
 } from "@/components/shadcn/ui/form"
 import { Input } from "@/components/shadcn/ui/input"
+import { signUpWithEmailAndPasswordAction } from "@/server/actions/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Loader2 } from "lucide-react"
+import { useAction } from "next-safe-action/hooks"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
+import toast from "react-hot-toast"
 import { z } from "zod"
 
 const formSchema = z.object({
@@ -35,9 +39,23 @@ export function SignUpForm() {
     },
   })
 
+  const { execute, status } = useAction(signUpWithEmailAndPasswordAction, {
+    onError: ({ error }) => {
+      if (error.serverError) toast.error(error.serverError)
+    },
+  })
+
   return (
     <Form {...form}>
-      <form className="space-y-4" onSubmit={form.handleSubmit(() => {})}>
+      <form
+        className="space-y-4"
+        onSubmit={form.handleSubmit((formData) => {
+          execute({
+            email: formData.email,
+            password: formData.password,
+          })
+        })}
+      >
         <FormField
           control={form.control}
           name="email"
@@ -72,7 +90,14 @@ export function SignUpForm() {
             )
           }}
         />
-        <Button type="submit" className="w-full">
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={status === "executing"}
+        >
+          {status === "executing" && (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          )}
           Sign up
         </Button>
         <p className="text-sm text-muted-foreground">
